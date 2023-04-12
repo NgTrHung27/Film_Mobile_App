@@ -8,13 +8,13 @@ public class MovieModel {
     String Cast;
     String Country;
     String Cover;
-    String Desc;
-    String Eps;
+    String Description;
+    String Episode;
     String Length;
     String Link;
     String Rating;
     String Title;
-    String Histroy;
+    String History;
     String Thumb;
     String Cate;
 
@@ -22,18 +22,18 @@ public class MovieModel {
     }
 
     public MovieModel(String cast, String country, String cover, String description,
-                      String episode, String length, String link, String rating, String title, String thumb,String histroy,String cate) {
+                      String episode, String length, String link, String rating, String title, String thumb,String history,String cate) {
         Cast = cast;
         Country = country;
         Cover = cover;
-        Desc = description;
-        Eps = episode;
+        Description = description;
+        Episode = episode;
         Length = length;
         Link = link;
         Rating = rating;
         Title = title;
         Thumb = thumb;
-        Histroy = histroy;
+        History = history;
         Cate = cate;
     }
 
@@ -62,19 +62,19 @@ public class MovieModel {
     }
 
     public String getDescription() {
-        return Desc;
+        return Description;
     }
 
     public void setDescription(String description) {
-        Desc = description;
+        Description = description;
     }
 
     public String getEpisode() {
-        return Eps;
+        return Episode;
     }
 
     public void setEpisode(String episode) {
-        Eps = episode;
+        Episode = episode;
     }
 
     public String getLength() {
@@ -101,20 +101,20 @@ public class MovieModel {
         Rating = rating;
     }
 
-    public String getHistroy() {
-        return Histroy;
+    public String getTitle() {
+        return Title;
     }
 
-    public void setHistroy(String histroy) {
-        Histroy = histroy;
+    public void setTitle(String title) {
+        Title = title;
     }
 
-    public String getCate() {
-        return Cate;
+    public String getHistory() {
+        return History;
     }
 
-    public void setCate(String cate) {
-        Cate = cate;
+    public void setHistory(String history) {
+        History = history;
     }
 
     public String getThumb() {
@@ -125,11 +125,11 @@ public class MovieModel {
         Thumb = thumb;
     }
 
-    public String getTitle() {
-        return Title;
+    public String getCate() {
+        return Cate;
     }
 
-    public void setTitle(String title) {
-        Title = title;
+    public void setCate(String cate) {
+        Cate = cate;
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Details_setting_activity.Contact_Activity">
+    <!-- Tên doanh nghiệp -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PHT Group"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="16dp"/>
+
+    <!-- Số điện thoại hỗ trợ -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Số điện thoại hỗ trợ: 0123456789"
+        android:textSize="16sp"
+        android:padding="16dp"/>
+
+    <!-- Email hỗ trợ -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email hỗ trợ: support@tendoanhnghiep.com"
+        android:textSize="16sp"
+        android:padding="16dp"/>
+
+    <!-- Thông tin khác -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chúng tôi rất vui khi được hỗ trợ bạn. Nếu bạn có bất kỳ câu hỏi hoặc đóng góp nào, hãy liên hệ với chúng tôi."
+        android:textSize="16sp"
+        android:padding="16dp"/>
+
+</LinearLayout>

@@ -1,32 +1,62 @@
 package com.example.myapplication.Activity;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentManager;
+import android.graphics.Matrix;
+import android.icu.number.Scale;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+
+import com.example.myapplication.Adapter;
+import com.example.myapplication.AnimeAdapter;
+import com.example.myapplication.CartoonAdapter;
 import com.example.myapplication.FeatureAdapter;
 import com.example.myapplication.Fragment.SearchFragment;
 import com.example.myapplication.Fragment.SettingFragment;
+import com.example.myapplication.Model.AnimeModel;
 import com.example.myapplication.Model.FeatureModel;
 import com.example.myapplication.Model.MovieModel;
 import com.example.myapplication.MovieAdapter;
 import com.example.myapplication.R;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -35,32 +65,32 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.lang.ref.Reference;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MovieTest extends AppCompatActivity {
-//    FirebaseStorage storage = FirebaseStorage.getInstance();
-//    StorageReference storageRef;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef;
+    FirebaseFirestore db;
 
     ArrayList<MovieModel> movieModels;
+    ArrayList<AnimeModel> animeModels;
+    AnimeAdapter animeAdapter;
     MovieAdapter movieAdapter;
 
     ArrayList<FeatureModel> featureModels;
     FeatureAdapter featureAdapter;
 
-    RecyclerView rv_Movie;
+    RecyclerView rv_anime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_test);
-        //initialize firebase for application
-        FirebaseApp.initializeApp(this);
 
-        //region ToolBar
+        storageRef = storage.getReference();
+
         Toolbar toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+        getSupportActionBar().setTitle("");
         getSupportActionBar().setLogo(R.drawable.toolbar_logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
@@ -69,32 +99,36 @@ public class MovieTest extends AppCompatActivity {
             display(item.getItemId());
             return true;
         });
-        //endregion
 
-        //region SliderView
+        FirebaseApp.initializeApp(this);
         SliderView sliderView = findViewById(R.id.sliderView);
         featureAdapter = new FeatureAdapter(this);
         sliderView.setSliderAdapter(featureAdapter);
-        sliderView.setCurrentPagePosition(6);
+        sliderView.setCurrentPagePosition(0);
         sliderView.setIndicatorAnimation(IndicatorAnimationType.SCALE);
         sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
         sliderView.setAutoCycle(true);
         sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
-        sliderView.setScrollTimeInSec(3);
-        //endregion
+        sliderView.setScrollTimeInSec(6);
+        renewItems(sliderView);
 
         movieModels = new ArrayList<>();
         movieAdapter = new MovieAdapter(movieModels);
-        rv_Movie = findViewById(R.id.rv_Movie);
-        rv_Movie.setAdapter(movieAdapter);
-        rv_Movie.setLayoutManager(new GridLayoutManager(this,3));
+        db = FirebaseFirestore.getInstance();
 
-        renewItems(sliderView);
+        rv_anime = findViewById(R.id.rv_Anime);
+        rv_anime.setAdapter(movieAdapter);
+        rv_anime.setLayoutManager(new GridLayoutManager(this,3));
+
+//        rv_cartoon = findViewById(R.id.rv_Cartoon);
+//        rv_cartoon.setAdapter(movieAdapter);
+//        rv_cartoon.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+
         loadFeatureSlider();
-        loadFilmData();
+        loadAnimeData();
+
     }
 
-    //region Fragment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -102,7 +136,6 @@ public class MovieTest extends AppCompatActivity {
         return true;
     }
 
-    @SuppressLint("NonConstantResourceId")
     void display(int id){
         Fragment fragment = null;
         switch (id){
@@ -113,7 +146,8 @@ public class MovieTest extends AppCompatActivity {
                 fragment = new SearchFragment();
                 break;
         }
-        //FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
                 .replace(R.id.content,fragment,null).addToBackStack("fragment_setting");
         //replace framelayout(id content)
@@ -135,10 +169,13 @@ public class MovieTest extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-    //endregion
+
+    private void loadMovieData() {
+        //implement in next video
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void loadFilmData() {
+    private void loadAnimeData() {
         db.collection("Film").get().addOnCompleteListener(task -> {
             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
                 String title = documentSnapshot.get("Title").toString();
@@ -180,4 +217,25 @@ public class MovieTest extends AppCompatActivity {
         featureAdapter.renewItems(featureModels);
         featureAdapter.deleteItems(0);
     }
+    public void updateHistoryFilm(){
+        CollectionReference filmsRef = db.collection("Film");
+
+        // Lấy tất cả các documents trong collection "Film"
+        filmsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Duyệt qua tất cả các documents trong collection "Film"
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Lấy ID của document hiện tại
+                    String documentId = document.getId();
+
+                    // Cập nhật giá trị của trường "History" trong document hiện tại
+                    DocumentReference currentDocRef = db.collection("Film").document(documentId);
+                    currentDocRef.update("History", "1");
+                }
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
+            }
+        });
+    }
+
 }

@@ -124,6 +124,7 @@ public class DetailsActivity extends AppCompatActivity {
                 episodeModels.add(new EpisodeModel(url,vidurl));
             }
             episodeAdapter.notifyDataSetChanged();
+
         }).addOnFailureListener(e ->
                 Toast.makeText(DetailsActivity.this, "ERROR", Toast.LENGTH_SHORT).show());
     }
