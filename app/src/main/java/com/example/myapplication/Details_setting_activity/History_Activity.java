@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.EpisodeAdapter;
 import com.example.myapplication.HistoryAdapter;
@@ -73,7 +75,7 @@ public class History_Activity extends AppCompatActivity  {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         loadHistoryData();
 
-        Button btnClearHis = findViewById(R.id.bt_remove_his);
+        ImageButton btnClearHis = findViewById(R.id.btn_Clear);
         btnClearHis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,15 +87,10 @@ public class History_Activity extends AppCompatActivity  {
                             db.collection("ViewHistory").document(document).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-
+                                    Toast.makeText(History_Activity.this, "Delete Success!!!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
                     }
                 });
             }
