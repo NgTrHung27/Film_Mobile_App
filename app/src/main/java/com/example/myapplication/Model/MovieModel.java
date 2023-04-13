@@ -1,5 +1,7 @@
 package com.example.myapplication.Model;
 
+import androidx.lifecycle.AndroidViewModel;
+
 public class MovieModel {
     String Cast;
     String Country;

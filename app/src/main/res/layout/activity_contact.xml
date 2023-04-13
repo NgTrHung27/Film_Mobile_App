@@ -5,7 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Details_setting_activity.Contact_Activity">
+    tools:context=".Details_setting_activity.Contact_Activity"
+    android:background="@color/purple_700">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar"
+        android:backgroundTint="@color/toolbar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginVertical="8dp"
+            app:titleTextColor="@color/white"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <!-- Tên doanh nghiệp -->
     <TextView
         android:layout_width="match_parent"
@@ -13,7 +32,8 @@
         android:text="PHT Group"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:textColor="@color/white"/>
 
     <!-- Số điện thoại hỗ trợ -->
     <TextView
@@ -21,7 +41,8 @@
         android:layout_height="wrap_content"
         android:text="Số điện thoại hỗ trợ: 0123456789"
         android:textSize="16sp"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:textColor="@color/white"/>
 
     <!-- Email hỗ trợ -->
     <TextView
@@ -29,7 +50,8 @@
         android:layout_height="wrap_content"
         android:text="Email hỗ trợ: support@tendoanhnghiep.com"
         android:textSize="16sp"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:textColor="@color/white"/>
 
     <!-- Thông tin khác -->
     <TextView
@@ -37,6 +59,7 @@
         android:layout_height="wrap_content"
         android:text="Chúng tôi rất vui khi được hỗ trợ bạn. Nếu bạn có bất kỳ câu hỏi hoặc đóng góp nào, hãy liên hệ với chúng tôi."
         android:textSize="16sp"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:textColor="@color/white"/>
 
 </LinearLayout>
