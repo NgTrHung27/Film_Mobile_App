@@ -66,12 +66,11 @@ public class History_Activity extends AppCompatActivity  {
     private void loadHistoryData(){
         db.collection("ViewHistory").get().addOnCompleteListener(task -> {
            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-               String title = documentSnapshot.get("title").toString();
                String his = documentSnapshot.get("history").toString();
                String link = documentSnapshot.get("link").toString();
+               String title = documentSnapshot.get("title").toString();
                String thumb = documentSnapshot.get("thumb").toString();
-
-               historyModels.add(new HistoryModel(title,his,link,thumb));
+               historyModels.add(new HistoryModel(his,link,title,thumb));
            }
             historyAdapter.notifyDataSetChanged();
         });

@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.graphics.BitmapFactory.decodeFile;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Activity.PlayerActivity;
 import com.example.myapplication.Model.HistoryModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -79,6 +81,30 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference pathReference = storageRef.child(historyModel.getThumb());
 
+        try{
+            File file = File.createTempFile("image", "jpg");
+            pathReference.getFile(file)
+                    .addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                            holder.imageViewHistory.setImageBitmap(decodeFile(file.getPath()));
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("ABC",e.getMessage());
+                        }
+                    });
+        }catch (IOException e)
+        {
+            throw new RuntimeException();
+        }
+        holder.imageViewHistory.setOnClickListener(view -> {
+                    Intent i = new Intent(view.getContext(), PlayerActivity.class);
+                    i.putExtra("vid", historyModel.getLink());
+                    holder.itemView.getContext().startActivity(i);
+                });
         db = FirebaseFirestore.getInstance();
         CollectionReference historyRef = db.collection("ViewHistory");
         historyRef.whereEqualTo("history", 1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -106,8 +132,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
 
         public MyVH(@NonNull View itemView) {
             super(itemView);
-            imageViewHistory = itemView.findViewById(R.id.imageViewHistory);
-            movie_title_History = itemView.findViewById(R.id.movie_title_History);
+            imageViewHistory = itemView.findViewById(R.id.imageView);
+            movie_title_History = itemView.findViewById(R.id.movie_title);
         }
     }
 

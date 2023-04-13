@@ -54,7 +54,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyVH> {
         holder.textView.setText(movieModel.getTitle());
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference pathReference = storageRef.child(movieModel.getThumb());
-
         try{
             File file = File.createTempFile("image", "jpg");
             pathReference.getFile(file)
@@ -74,6 +73,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyVH> {
         {
             throw new RuntimeException();
         }
+
         holder.imageView.setOnClickListener(view -> {
             //when click send data to details activity
             Intent sendData2Detail = new Intent(holder.imageView.getContext(), DetailsActivity.class);

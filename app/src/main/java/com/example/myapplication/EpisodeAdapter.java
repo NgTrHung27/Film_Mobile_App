@@ -101,7 +101,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
         {
             throw new RuntimeException();
         }
-        holder.itemView.setOnClickListener(view -> {
+        holder.part_image.setOnClickListener(view -> {
 
             Intent i = new Intent(view.getContext(), PlayerActivity.class);
             i.putExtra("vid",episodeModel.getVidurl());
