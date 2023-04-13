@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
-public class History_Activity extends AppCompatActivity implements EpisodeAdapter.OnItemClickListener {
+public class History_Activity extends AppCompatActivity  {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
@@ -52,11 +52,11 @@ public class History_Activity extends AppCompatActivity implements EpisodeAdapte
 
 
         historyModels = new ArrayList<>();
-        HistoryAdapter adapter = new HistoryAdapter(historyModels);
+        historyAdapter = new HistoryAdapter(historyModels);
 
         HistoryWatching = findViewById(R.id.rv_HistoryWatching);
         HistoryWatching.setLayoutManager(new GridLayoutManager(this,3));
-        HistoryWatching.setAdapter(adapter);
+        HistoryWatching.setAdapter(historyAdapter);
         db = FirebaseFirestore.getInstance();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -64,20 +64,17 @@ public class History_Activity extends AppCompatActivity implements EpisodeAdapte
         loadHistoryData();
     }
     private void loadHistoryData(){
-        db.collection("Film").get().addOnCompleteListener(task -> {
+        db.collection("ViewHistory").get().addOnCompleteListener(task -> {
            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-               String title = documentSnapshot.get("Title").toString();
-               String his = documentSnapshot.get("History").toString();
-               String link = documentSnapshot.get("Link").toString();
-               String thumb = documentSnapshot.get("Thumb").toString();
+               String title = documentSnapshot.get("title").toString();
+               String his = documentSnapshot.get("history").toString();
+               String link = documentSnapshot.get("link").toString();
+               String thumb = documentSnapshot.get("thumb").toString();
 
                historyModels.add(new HistoryModel(title,his,link,thumb));
            }
+            historyAdapter.notifyDataSetChanged();
         });
     }
 
-    @Override
-    public void onItemClick(String title, String thumb, String link) {
-
-    }
 }

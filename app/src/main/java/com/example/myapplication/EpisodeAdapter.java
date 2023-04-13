@@ -106,7 +106,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             Intent i = new Intent(view.getContext(), PlayerActivity.class);
             i.putExtra("vid",episodeModel.getVidurl());
             holder.itemView.getContext().startActivity(i);
-            HistoryModel history = new HistoryModel("ssss", "aaa", "tttt", "qqq");
+            HistoryModel history = new HistoryModel("ssss", episodeModel.getVidurl(), "tttt", episodeModel.getUrl());
             saveToFireStore(history);
 
             // Lấy tất cả các documents trong collection "Film"

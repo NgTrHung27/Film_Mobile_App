@@ -1,50 +1,47 @@
 package com.example.myapplication.Model;
 
 public class HistoryModel {
-
+    String history;
+    String link;
+    String title;
+    String thumb;
 
     public HistoryModel(String history, String link, String title, String thumb) {
-        History = history;
-        Link = link;
-        Title = title;
-        Thumb = thumb;
+        this.history = history;
+        this.link = link;
+        this.title = title;
+        this.thumb = thumb;
     }
 
     public String getHistory() {
-        return History;
+        return history;
     }
 
     public void setHistory(String history) {
-        History = history;
+        this.history = history;
     }
 
     public String getLink() {
-        return Link;
+        return link;
     }
 
     public void setLink(String link) {
-        Link = link;
+        this.link = link;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getThumb() {
-        return Thumb;
+        return thumb;
     }
 
     public void setThumb(String thumb) {
-        Thumb = thumb;
+        this.thumb = thumb;
     }
-
-    String History;
-    String Link;
-    String Title;
-    String Thumb;
-
 }

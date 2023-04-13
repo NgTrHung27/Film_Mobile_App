@@ -18,7 +18,8 @@
         android:transitionName="imageMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo2_removebg"/>
 
     <TextView
         android:id="@+id/movie_title_History"
