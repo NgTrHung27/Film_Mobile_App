@@ -50,18 +50,7 @@ import java.util.UUID;
 
 public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
     List<EpisodeModel> episodeModels;
-    List<MovieModel> movieModels;
     FirebaseFirestore db;
-
-    private AdapterView.OnItemClickListener mListener;
-
-    public interface OnItemClickListener {
-        void onItemClick(String title, String thumb, String link);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mListener = (AdapterView.OnItemClickListener) listener;
-    }
 
     public EpisodeAdapter(List<EpisodeModel> models) {
         this.episodeModels = models;
@@ -71,7 +60,6 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
     @Override
     public EpisodeAdapter.MyVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.part_item,parent,false);
-
         return new MyVH(v);
     }
 
@@ -90,8 +78,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
                         public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
                             holder.part_image.setImageBitmap(decodeFile(file.getPath()));
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
+                    }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.d("ABC",e.getMessage());
@@ -102,56 +89,11 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             throw new RuntimeException();
         }
         holder.part_image.setOnClickListener(view -> {
-
             Intent i = new Intent(view.getContext(), PlayerActivity.class);
-            i.putExtra("vid",episodeModel.getVidurl());
+            i.putExtra("vid", episodeModel.getVidurl());
             holder.itemView.getContext().startActivity(i);
-            HistoryModel history = new HistoryModel("ssss", episodeModel.getVidurl(), "tttt", episodeModel.getUrl());
+            HistoryModel history = new HistoryModel("abc", episodeModel.getVidurl(),"", episodeModel.getUrl());
             saveToFireStore(history);
-
-            // Lấy tất cả các documents trong collection "Film"
-//            filmsRef.get().addOnCompleteListener(task -> {
-//                /// them du lieu len fs
-////                if (task.isSuccessful()) {
-////                    // Duyệt qua tất cả các documents trong collection "Film"
-////                    for (QueryDocumentSnapshot document : task.getResult()) {
-////                        // Lấy ID của document hiện tại
-////                        String documentId = document.getId();
-////
-////                        // Cập nhật giá trị của trường "History" trong document hiện tại
-////                        DocumentReference currentDocRef = db.collection("Film").document(documentId);
-////                        currentDocRef.update("History", "1");
-////                    }
-////                } else {
-////                    Log.d(TAG, "Error getting documents: ", task.getException());
-////                }
-//            });
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (mListener != null) {
-//                        mListener.onItemClick(movieModels.get(position).getTitle(), movieModels.get(position).getLink(), movieModels.get(position).getThumb());
-//                    }
-//                }
-//            });
-
-
-//            if (movieModels != null && movieModels.size() > position) {
-//                Intent sendData2History = new Intent(holder.itemView.getContext(), History_Activity.class);
-//                sendData2History.putExtra("title",movieModels.get(position).getTitle());
-//                sendData2History.putExtra("history",movieModels.get(position).getTitle());
-//                sendData2History.putExtra("link",movieModels.get(position).getLink());
-//
-//                //transition animation 2 detail
-//                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
-//                        .makeSceneTransitionAnimation((Activity)holder.itemView.getContext(),holder.itemView,
-//                                "imageMain");
-//                //sharedElementName is the same as xml file (imageMain)
-//                holder.itemView.getContext().startActivity(sendData2History,optionsCompat.toBundle());
-//            } else {
-//                Log.e(TAG, "movieModels is null or size <= position");
-//            }
-
         });
     }
     public void saveToFireStore(HistoryModel History) {

@@ -47,40 +47,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
     }
 
     @Override
-//    public void onBindViewHolder(@NonNull MyVH holder, int position) {
-//        HistoryModel historyModel =  historyModels.get(position);
-//        holder.movie_title_History.setText(historyModel.getTitle());
-//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-//        StorageReference pathReference = storageRef.child(historyModel.getThumb());
-//
-//        db = FirebaseFirestore.getInstance();
-//        CollectionReference filmsRef = db.collection("Film");
-//        try{
-//            File file = File.createTempFile("history_image", "jpg");
-//            pathReference.getFile(file)
-//                    .addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-//                            holder.imageViewHistory.setImageBitmap(decodeFile(file.getPath()));
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.d("ABC",e.getMessage());
-//                        }
-//                    });
-//        }catch (IOException e)
-//        {
-//            throw new RuntimeException();
-//        }
-//    }
     public void onBindViewHolder(@NonNull MyVH holder, int position) {
         HistoryModel historyModel =  historyModels.get(position);
         holder.movie_title_History.setText(historyModel.getTitle());
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference pathReference = storageRef.child(historyModel.getThumb());
-
         try{
             File file = File.createTempFile("image", "jpg");
             pathReference.getFile(file)
@@ -96,15 +67,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
                             Log.d("ABC",e.getMessage());
                         }
                     });
-        }catch (IOException e)
-        {
+        }catch (IOException e) {
             throw new RuntimeException();
         }
+
         holder.imageViewHistory.setOnClickListener(view -> {
                     Intent i = new Intent(view.getContext(), PlayerActivity.class);
                     i.putExtra("vid", historyModel.getLink());
                     holder.itemView.getContext().startActivity(i);
                 });
+
         db = FirebaseFirestore.getInstance();
         CollectionReference historyRef = db.collection("ViewHistory");
         historyRef.whereEqualTo("history", 1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

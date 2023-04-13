@@ -90,6 +90,7 @@ public class History_Activity extends AppCompatActivity  {
                                     Toast.makeText(History_Activity.this, "Delete Success!!!", Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            historyModels.clear();
                         }
                     }
                 });
