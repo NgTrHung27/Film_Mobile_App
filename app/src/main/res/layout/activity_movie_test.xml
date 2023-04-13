@@ -65,7 +65,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/sliderView" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_Anime"
+                    android:id="@+id/rv_Movie"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="8dp"

@@ -1,9 +1,5 @@
 package com.example.myapplication.Model;
 
-import com.google.firebase.firestore.DocumentReference;
-
-import java.lang.ref.Reference;
-
 public class MovieModel {
     String Cast;
     String Country;
@@ -19,6 +15,11 @@ public class MovieModel {
     String Cate;
 
     public MovieModel() {
+    }
+
+    public MovieModel(String title, String thumb) {
+        Title = title;
+        Thumb = thumb;
     }
 
     public MovieModel(String cast, String country, String cover, String description,

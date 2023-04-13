@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 
@@ -72,14 +73,12 @@ public class MovieTest extends AppCompatActivity {
     FirebaseFirestore db;
 
     ArrayList<MovieModel> movieModels;
-    ArrayList<AnimeModel> animeModels;
-    AnimeAdapter animeAdapter;
     MovieAdapter movieAdapter;
 
     ArrayList<FeatureModel> featureModels;
     FeatureAdapter featureAdapter;
 
-    RecyclerView rv_anime;
+    RecyclerView rv_Movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,16 +115,16 @@ public class MovieTest extends AppCompatActivity {
         movieAdapter = new MovieAdapter(movieModels);
         db = FirebaseFirestore.getInstance();
 
-        rv_anime = findViewById(R.id.rv_Anime);
-        rv_anime.setAdapter(movieAdapter);
-        rv_anime.setLayoutManager(new GridLayoutManager(this,3));
+        rv_Movie = findViewById(R.id.rv_Movie);
+        rv_Movie.setAdapter(movieAdapter);
+        rv_Movie.setLayoutManager(new GridLayoutManager(this,3));
 
 //        rv_cartoon = findViewById(R.id.rv_Cartoon);
 //        rv_cartoon.setAdapter(movieAdapter);
 //        rv_cartoon.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
 
         loadFeatureSlider();
-        loadAnimeData();
+        loadFilmData();
 
     }
 
@@ -133,7 +132,60 @@ public class MovieTest extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_item,menu);
-        return true;
+        //region Search
+        MenuItem item = menu.findItem(R.id.mn_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                //call when press search button
+                seachData(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                //call when type letter
+                if (s.isEmpty()){
+                    movieModels.clear();
+                    loadFilmData();
+                }else {
+                    rv_Movie.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+        });
+        //endregion
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    void seachData(String s){
+        db.collection("Film").whereEqualTo("Search",s.toLowerCase())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        movieModels.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            String title = documentSnapshot.get("Title").toString();
+                            String cast = documentSnapshot.get("Cast").toString();
+                            String cover = documentSnapshot.get("Cover").toString();
+                            String desc = documentSnapshot.get("Desc").toString();
+                            String eps = documentSnapshot.get("Eps").toString();
+                            String his = documentSnapshot.get("History").toString();
+                            String length = documentSnapshot.get("Length").toString();
+                            String link = documentSnapshot.get("Link").toString();
+                            String rate = documentSnapshot.get("Rate").toString();
+                            String cate = documentSnapshot.get("Cate").toString();
+                            String thumb = documentSnapshot.get("Thumb").toString();
+                            String country = documentSnapshot.get("Country").toString();
+                            movieModels.add(new MovieModel(cast, country, cover, desc, eps, length, link, rate, title, thumb, his, cate));
+                        }
+                        movieAdapter = new MovieAdapter(movieModels);
+                        rv_Movie.setAdapter(movieAdapter);
+                    }
+                }).addOnFailureListener(e -> {
+                });
     }
 
     void display(int id){
@@ -175,7 +227,7 @@ public class MovieTest extends AppCompatActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void loadAnimeData() {
+    private void loadFilmData() {
         db.collection("Film").get().addOnCompleteListener(task -> {
             for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
                 String title = documentSnapshot.get("Title").toString();
@@ -217,25 +269,4 @@ public class MovieTest extends AppCompatActivity {
         featureAdapter.renewItems(featureModels);
         featureAdapter.deleteItems(0);
     }
-    public void updateHistoryFilm(){
-        CollectionReference filmsRef = db.collection("Film");
-
-        // Lấy tất cả các documents trong collection "Film"
-        filmsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // Duyệt qua tất cả các documents trong collection "Film"
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    // Lấy ID của document hiện tại
-                    String documentId = document.getId();
-
-                    // Cập nhật giá trị của trường "History" trong document hiện tại
-                    DocumentReference currentDocRef = db.collection("Film").document(documentId);
-                    currentDocRef.update("History", "1");
-                }
-            } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
-            }
-        });
-    }
-
 }

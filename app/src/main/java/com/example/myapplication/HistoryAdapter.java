@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,8 +31,10 @@ import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
     FirebaseFirestore db;
-    List<HistoryAdapter> historyAdapters;
     ArrayList<HistoryModel> historyModels;
+
+    public HistoryAdapter(ArrayList<HistoryModel> historyModels) {this.historyModels = historyModels;}
+
 
     @NonNull
     @Override
@@ -41,49 +45,69 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
     }
 
     @Override
+//    public void onBindViewHolder(@NonNull MyVH holder, int position) {
+//        HistoryModel historyModel =  historyModels.get(position);
+//        holder.movie_title_History.setText(historyModel.getTitle());
+//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//        StorageReference pathReference = storageRef.child(historyModel.getThumb());
+//
+//        db = FirebaseFirestore.getInstance();
+//        CollectionReference filmsRef = db.collection("Film");
+//        try{
+//            File file = File.createTempFile("history_image", "jpg");
+//            pathReference.getFile(file)
+//                    .addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+//                            holder.imageViewHistory.setImageBitmap(decodeFile(file.getPath()));
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.d("ABC",e.getMessage());
+//                        }
+//                    });
+//        }catch (IOException e)
+//        {
+//            throw new RuntimeException();
+//        }
+//    }
     public void onBindViewHolder(@NonNull MyVH holder, int position) {
         HistoryModel historyModel =  historyModels.get(position);
-        holder.textView.setText(historyModel.getTitle());
+        holder.movie_title_History.setText(historyModel.getTitle());
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference pathReference = storageRef.child(historyModel.getThumb());
 
         db = FirebaseFirestore.getInstance();
-        CollectionReference filmsRef = db.collection("Film");
-        try{
-            File file = File.createTempFile("episode_image", "jpg");
-            pathReference.getFile(file)
-                    .addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-                            holder.imageView.setImageBitmap(decodeFile(file.getPath()));
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("ABC",e.getMessage());
-                        }
-                    });
-        }catch (IOException e)
-        {
-            throw new RuntimeException();
-        }
+        CollectionReference historyRef = db.collection("ViewHistory");
+        historyRef.whereEqualTo("history", 1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        HistoryModel historyModel = document.toObject(HistoryModel.class);
+                        historyModels.add(historyModel);
+                    }
+                    notifyDataSetChanged();
+                }
+            }
+        });
     }
-
     @Override
     public int getItemCount() {
-        return 0;
+        return historyModels.size();
     }
 
 
     public class MyVH extends RecyclerView.ViewHolder{
-        ImageView imageView;
-        TextView textView;
+        ImageView imageViewHistory;
+        TextView movie_title_History;
 
         public MyVH(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
-            textView = itemView.findViewById(R.id.movie_title);
+            imageViewHistory = itemView.findViewById(R.id.imageViewHistory);
+            movie_title_History = itemView.findViewById(R.id.movie_title_History);
         }
     }
 

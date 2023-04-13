@@ -102,19 +102,35 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             });
+//                  Lỗi làm cho k đổi sang số 1
+//            //when click send data to history activity
+//            Intent sendData2History = new Intent(holder.itemView.getContext(), History_Activity.class);
+//            sendData2History.putExtra("title",movieModels.get(position).getTitle());
+//            sendData2History.putExtra("history",movieModels.get(position).getTitle());
+//            sendData2History.putExtra("link",movieModels.get(position).getLink());
+//
+//            //transition animation 2 detail
+//            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+//                    .makeSceneTransitionAnimation((Activity)holder.itemView.getContext(),holder.itemView,
+//                            "imageMain");
+//            //sharedElementName is the same as xml file (imageMain)
+//            holder.itemView.getContext().startActivity(sendData2History,optionsCompat.toBundle());
+            if (movieModels != null && movieModels.size() > position) {
+                Intent sendData2History = new Intent(holder.itemView.getContext(), History_Activity.class);
+                sendData2History.putExtra("title",movieModels.get(position).getTitle());
+                sendData2History.putExtra("history",movieModels.get(position).getTitle());
+                sendData2History.putExtra("link",movieModels.get(position).getLink());
 
-            //when click send data to details activity
-            Intent sendData2History = new Intent(holder.itemView.getContext(), History_Activity.class);
-            sendData2History.putExtra("title",movieModels.get(position).getTitle());
-            sendData2History.putExtra("history",movieModels.get(position).getTitle());
-            sendData2History.putExtra("link",movieModels.get(position).getLink());
+                //transition animation 2 detail
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation((Activity)holder.itemView.getContext(),holder.itemView,
+                                "imageMain");
+                //sharedElementName is the same as xml file (imageMain)
+                holder.itemView.getContext().startActivity(sendData2History,optionsCompat.toBundle());
+            } else {
+                Log.e(TAG, "movieModels is null or size <= position");
+            }
 
-            //transition animation 2 detail
-            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
-                    .makeSceneTransitionAnimation((Activity)holder.itemView.getContext(),holder.itemView,
-                            "imageMain");
-            //sharedElementName is the same as xml file (imageMain)
-            holder.itemView.getContext().startActivity(sendData2History,optionsCompat.toBundle());
         });
     }
 
