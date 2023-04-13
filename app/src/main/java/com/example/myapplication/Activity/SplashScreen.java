@@ -43,7 +43,7 @@ public class SplashScreen extends AppCompatActivity {
         slogan.setAnimation(bottomAnim);
 
         new Handler().postDelayed(() -> {
-            Intent i = new Intent(SplashScreen.this, HomeActivity.class);
+            Intent i = new Intent(SplashScreen.this, MovieTest.class);
             startActivity(i);
             finish();
         },SPLASH_SCREEN);
