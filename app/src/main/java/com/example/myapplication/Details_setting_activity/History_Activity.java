@@ -1,10 +1,13 @@
 package com.example.myapplication.Details_setting_activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,9 +49,15 @@ public class History_Activity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        Toolbar toolbar = findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("History");
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_24);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         storageRef = storage.getReference();
         FirebaseApp.initializeApp(this);
+
 
 
         historyModels = new ArrayList<>();
@@ -58,6 +67,13 @@ public class History_Activity extends AppCompatActivity  {
         HistoryWatching.setLayoutManager(new GridLayoutManager(this,3));
         HistoryWatching.setAdapter(historyAdapter);
         db = FirebaseFirestore.getInstance();
+        Button btnClearHis = findViewById(R.id.bt_remove_his);
+        btnClearHis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                historyModels.clear();
+            }
+        });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference filmsRef = db.collection("Film");
