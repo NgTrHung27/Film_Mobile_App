@@ -2,6 +2,7 @@ package com.example.myapplication.Model;
 
 public class HistoryModel {
 
+
     public HistoryModel(String history, String link, String title, String thumb) {
         History = history;
         Link = link;

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.myapplication.EpisodeAdapter;
 import com.example.myapplication.HistoryAdapter;
 import com.example.myapplication.Model.HistoryModel;
 import com.example.myapplication.Model.MovieModel;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
-public class History_Activity extends AppCompatActivity {
+public class History_Activity extends AppCompatActivity implements EpisodeAdapter.OnItemClickListener {
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
@@ -73,5 +74,10 @@ public class History_Activity extends AppCompatActivity {
                historyModels.add(new HistoryModel(title,his,link,thumb));
            }
         });
+    }
+
+    @Override
+    public void onItemClick(String title, String thumb, String link) {
+
     }
 }
