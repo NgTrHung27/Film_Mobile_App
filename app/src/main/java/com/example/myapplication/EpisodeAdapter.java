@@ -92,7 +92,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             Intent i = new Intent(view.getContext(), PlayerActivity.class);
             i.putExtra("vid", episodeModel.getVidurl());
             holder.itemView.getContext().startActivity(i);
-            HistoryModel history = new HistoryModel("abc", episodeModel.getVidurl(),"", episodeModel.getUrl());
+            HistoryModel history = new HistoryModel(episodeModel.getVidurl(),"abc", episodeModel.getUrl());
             saveToFireStore(history);
         });
     }
@@ -102,7 +102,7 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             map.put("title", History.getTitle());
             map.put("thumb", History.getThumb());
             map.put("link", History.getLink());
-            map.put("history", History.getHistory());
+//            map.put("history", History.getHistory());
             String id = UUID.randomUUID().toString();
             db.collection("ViewHistory").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override

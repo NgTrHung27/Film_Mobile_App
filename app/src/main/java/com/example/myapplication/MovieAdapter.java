@@ -95,7 +95,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyVH> {
             //sharedElementName is the same as xml file (imageMain)
             holder.itemView.getContext().startActivity(sendData2Detail,optionsCompat.toBundle());
         });
-
     }
 
     @Override

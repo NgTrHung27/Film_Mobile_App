@@ -6,20 +6,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
-import com.example.myapplication.Activity.HomeActivity;
 import com.example.myapplication.Details_setting_activity.Contact_Activity;
 import com.example.myapplication.Details_setting_activity.Favourite_Activity;
 import com.example.myapplication.Details_setting_activity.Feedback_Activity;
@@ -31,7 +24,6 @@ import com.example.myapplication.Details_setting_activity.Terms_Activity;
 import com.example.myapplication.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.function.ToLongBiFunction;
 public class SettingFragment extends Fragment {
 
     @Override

@@ -77,20 +77,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyVH> {
                     holder.itemView.getContext().startActivity(i);
                 });
 
-        db = FirebaseFirestore.getInstance();
-        CollectionReference historyRef = db.collection("ViewHistory");
-        historyRef.whereEqualTo("history", 1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        HistoryModel historyModel = document.toObject(HistoryModel.class);
-                        historyModels.add(historyModel);
-                    }
-                    notifyDataSetChanged();
-                }
-            }
-        });
+//        db = FirebaseFirestore.getInstance();
+//        CollectionReference historyRef = db.collection("ViewHistory");
+//        historyRef.whereEqualTo("history", 1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        HistoryModel historyModel = document.toObject(HistoryModel.class);
+//                        historyModels.add(historyModel);
+//                    }
+//                    notifyDataSetChanged();
+//                }
+//            }
+//        });
     }
     @Override
     public int getItemCount() {

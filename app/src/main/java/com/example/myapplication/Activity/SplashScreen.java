@@ -32,11 +32,9 @@ public class SplashScreen extends AppCompatActivity {
         topAnim= AnimationUtils.loadAnimation(this,R.anim.top_animation);
         bottomAnim=AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
 
-        //Hooks
         img=findViewById(R.id.imageView);
         logo=findViewById(R.id.tv1);
         slogan=findViewById(R.id.tv2);
-
 
         img.setAnimation(topAnim);
         logo.setAnimation(bottomAnim);

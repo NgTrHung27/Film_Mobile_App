@@ -40,7 +40,7 @@
         android:fontFamily="@font/antic"
         android:text="Mediocre Movie App"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.Listener 
     ArrayList<Student> students;
     FirebaseFirestore db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,16 +34,11 @@ public class MainActivity extends AppCompatActivity implements Adapter.Listener 
         rvStudent = findViewById(R.id.rvList);
         students = new ArrayList<>();
 
-
-
         studentAdapter = new Adapter(MainActivity.this, students);
         rvStudent.setAdapter(studentAdapter);
 
-
         rvStudent.setLayoutManager((new LinearLayoutManager(MainActivity.this, RecyclerView.HORIZONTAL, false)));
         rvStudent.addItemDecoration(new DividerItemDecoration(MainActivity.this, DividerItemDecoration.VERTICAL));
-
-
 
         loadData();
     }

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+<!--    <uses-permission android:name="android.permission.INTERNET" />-->
 
     <application
         android:allowBackup="true"
@@ -55,9 +55,6 @@
             android:screenOrientation="landscape"
             android:supportsPictureInPicture="true"
             android:theme="@style/Theme.AppCompat.FullScreen" />
-        <activity
-            android:name=".Activity.HomeActivity"
-            android:exported="true" />
         <activity
             android:name=".Activity.SplashScreen"
             android:exported="true" >

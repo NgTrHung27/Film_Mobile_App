@@ -1,24 +1,15 @@
 package com.example.myapplication.Model;
 
 public class HistoryModel {
-    String history;
     String link;
     String title;
     String thumb;
+//    String history;
 
-    public HistoryModel(String history, String link, String title, String thumb) {
-        this.history = history;
+    public HistoryModel(String link, String title, String thumb) {
         this.link = link;
         this.title = title;
         this.thumb = thumb;
-    }
-
-    public String getHistory() {
-        return history;
-    }
-
-    public void setHistory(String history) {
-        this.history = history;
     }
 
     public String getLink() {

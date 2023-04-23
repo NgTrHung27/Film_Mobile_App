@@ -42,12 +42,8 @@ public class History_Activity extends AppCompatActivity  {
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     FirebaseFirestore db;
 
-
     ArrayList<HistoryModel> historyModels;
-
     HistoryAdapter historyAdapter;
-
-
     RecyclerView HistoryWatching;
 
 
@@ -84,6 +80,9 @@ public class History_Activity extends AppCompatActivity  {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
                             String document = documentSnapshot.getId();
+                            if (document.equals("0")){
+                                continue;
+                            }
                             db.collection("ViewHistory").document(document).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -93,6 +92,11 @@ public class History_Activity extends AppCompatActivity  {
                             historyModels.clear();
                         }
                     }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(History_Activity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         });
@@ -100,11 +104,13 @@ public class History_Activity extends AppCompatActivity  {
     private void loadHistoryData(){
         db.collection("ViewHistory").get().addOnCompleteListener(task -> {
            for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
-               String his = documentSnapshot.get("history").toString();
+               if (documentSnapshot.getId().equals("0")){
+                   continue;
+               }
                String link = documentSnapshot.get("link").toString();
                String title = documentSnapshot.get("title").toString();
                String thumb = documentSnapshot.get("thumb").toString();
-               historyModels.add(new HistoryModel(his,link,title,thumb));
+               historyModels.add(new HistoryModel(link,title,thumb));
            }
             historyAdapter.notifyDataSetChanged();
         });
