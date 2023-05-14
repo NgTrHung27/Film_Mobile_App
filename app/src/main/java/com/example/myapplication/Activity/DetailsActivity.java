@@ -93,7 +93,7 @@ public class DetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Glide.with(this).load(cover_movie).into(cover);
-        cover.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
+//        cover.setAnimation(AnimationUtils.loadAnimation(this,R.anim.scale_animation));
 
         title.setText(title_movie);
         desc.setText("Mô tả: " + desc_movie);

@@ -2,13 +2,13 @@
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#060C2E</color>
+    <color name="purple_700">#ced1de</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF000000</color>
 
-    <color name="toolbar">#0A1A73</color>
+    <color name="toolbar">#b9bcc8</color>
 
 <!--    SwitchColor-->
     <color name="disable_foregound_grey">@color/white</color>

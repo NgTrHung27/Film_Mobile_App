@@ -8,16 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.EpisodeAdapter;
 import com.example.myapplication.HistoryAdapter;
 import com.example.myapplication.Model.HistoryModel;
-import com.example.myapplication.Model.MovieModel;
 import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

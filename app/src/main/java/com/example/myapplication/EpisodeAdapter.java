@@ -5,6 +5,7 @@ import static android.graphics.BitmapFactory.decodeFile;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.example.myapplication.Activity.DetailsActivity;
 import com.example.myapplication.Activity.PlayerActivity;
 import com.example.myapplication.Details_setting_activity.History_Activity;
 import com.example.myapplication.Model.EpisodeModel;
+import com.example.myapplication.Model.FavouriteModel;
 import com.example.myapplication.Model.FeatureModel;
 import com.example.myapplication.Model.HistoryModel;
 import com.example.myapplication.Model.MovieModel;
@@ -95,6 +98,13 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             HistoryModel history = new HistoryModel(episodeModel.getVidurl(),"abc", episodeModel.getUrl());
             saveToFireStore(history);
         });
+        holder.SaveFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FavouriteModel favouriteModel = new FavouriteModel(episodeModel.getVidurl(),"Test", episodeModel.getUrl());
+                saveFavToFireStore(favouriteModel);
+            }
+        });
     }
     public void saveToFireStore(HistoryModel History) {
         if (!History.getTitle().isEmpty() && !History.getThumb().isEmpty()) {
@@ -112,6 +122,22 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
         }
     }
 
+    public void saveFavToFireStore(FavouriteModel favouriteModel) {
+        if (!favouriteModel.getTitle().isEmpty() && !favouriteModel.getThumb().isEmpty()) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("title", favouriteModel.getTitle());
+            map.put("thumb", favouriteModel.getThumb());
+            map.put("link", favouriteModel.getLink());
+//
+            String id = UUID.randomUUID().toString();
+            db.collection("Favourite").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                }
+            });
+        }
+    }
+
     @Override
     public int getItemCount() {
         return episodeModels.size();
@@ -119,10 +145,12 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
 
     public class MyVH extends RecyclerView.ViewHolder {
         ImageView part_image;
+        ImageButton SaveFav;
 
         public MyVH(@NonNull View itemView) {
             super(itemView);
             part_image=itemView.findViewById(R.id.part_image);
+            SaveFav = itemView.findViewById(R.id.btn_SaveFav);
         }
     }
 }
