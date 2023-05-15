@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,14 +41,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -54,6 +60,7 @@ import java.util.UUID;
 public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
     List<EpisodeModel> episodeModels;
     FirebaseFirestore db;
+    private String UUID_Favorite = "";
 
     public EpisodeAdapter(List<EpisodeModel> models) {
         this.episodeModels = models;
@@ -98,11 +105,28 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             HistoryModel history = new HistoryModel(episodeModel.getVidurl(),"abc", episodeModel.getUrl());
             saveToFireStore(history);
         });
-        holder.SaveFav.setOnClickListener(new View.OnClickListener() {
+
+//        holder.SaveFav.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FavouriteModel favouriteModel = new FavouriteModel(episodeModel.getVidurl(),"Test", episodeModel.getUrl());
+//                saveFavToFireStore(favouriteModel);
+//            }
+//        });
+        holder.checkFav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                FavouriteModel favouriteModel = new FavouriteModel(episodeModel.getVidurl(),"Test", episodeModel.getUrl());
-                saveFavToFireStore(favouriteModel);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        FavouriteModel favouriteModel = new FavouriteModel(episodeModel.getVidurl(),"Test", episodeModel.getUrl());
+                if (isChecked) {
+                    // Người dùng đã click vào checkbox, lưu dữ liệu lên Firestore
+                    saveFavToFireStore(favouriteModel);
+                    Toast.makeText(buttonView.getContext(), "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Người dùng đã bỏ chọn checkbox, xóa dữ liệu khỏi Firestore
+                    deleteFavFromFirestore(favouriteModel);
+                    Toast.makeText(buttonView.getContext(), "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
@@ -128,14 +152,15 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
             map.put("title", favouriteModel.getTitle());
             map.put("thumb", favouriteModel.getThumb());
             map.put("link", favouriteModel.getLink());
-//
-            String id = UUID.randomUUID().toString();
-            db.collection("Favourite").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                }
-            });
+            UUID_Favorite = UUID.randomUUID().toString();
+            map.put("id", UUID_Favorite);
+            favouriteModel.setId(UUID_Favorite);
+            db.collection("Favourite").document(favouriteModel.getId()).set(map);
+            notifyDataSetChanged();
         }
+    }
+    public void deleteFavFromFirestore(FavouriteModel favouriteModel){
+        db.collection("Favourite/").document(UUID_Favorite).delete();
     }
 
     @Override
@@ -145,12 +170,14 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.MyVH> {
 
     public class MyVH extends RecyclerView.ViewHolder {
         ImageView part_image;
-        ImageButton SaveFav;
+//        ImageButton SaveFav;
+        CheckBox checkFav;
 
         public MyVH(@NonNull View itemView) {
             super(itemView);
             part_image=itemView.findViewById(R.id.part_image);
-            SaveFav = itemView.findViewById(R.id.btn_SaveFav);
+            checkFav = itemView.findViewById(R.id.cbHeart);
+//            SaveFav = itemView.findViewById(R.id.btn_SaveFav);
         }
     }
 }

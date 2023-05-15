@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.myapplication.Activity.MovieTest;
 import com.example.myapplication.Details_setting_activity.Contact_Activity;
 import com.example.myapplication.Details_setting_activity.Favourite_Activity;
 import com.example.myapplication.Details_setting_activity.Feedback_Activity;
@@ -42,10 +43,10 @@ public class SettingFragment extends Fragment {
 
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_ios_24);
         toolbar.setNavigationOnClickListener(view1 -> {
-//            Intent i = new Intent(getContext(), HomeActivity.class);
-//            startActivity(i);
-//                getActivity().finish();
-            getActivity().onBackPressed();
+            Intent i = new Intent(getContext(), MovieTest.class);
+            startActivity(i);
+                getActivity().finish();
+//            getActivity().onBackPressed();
         });
 
         View.OnClickListener onClickListener = new View.OnClickListener() {

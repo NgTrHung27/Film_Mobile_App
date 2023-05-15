@@ -128,7 +128,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/baseline_favorite_border_24" />
+            android:src="@drawable/baseline_favorite_24" />
         <TextView
             android:text="Yêu thích"
             android:textSize="18sp"

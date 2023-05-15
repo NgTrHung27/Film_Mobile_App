@@ -1,22 +1,44 @@
 package com.example.myapplication.Model;
 
-public class FavouriteModel {
-    String link;
-    String thumb;
-    String title;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-    public FavouriteModel(String link, String thumb, String title) {
+public class FavouriteModel {
+    String id;
+    String link;
+    String title;
+    String thumb;
+    boolean isChecked;
+
+    public FavouriteModel(DocumentSnapshot snapshot) {
+        this.link = snapshot.getString("link");
+        this.title = snapshot.getString("title");
+        this.thumb = snapshot.getString("thumb");
+    }
+
+
+
+    public FavouriteModel(String link, String title, String thumb) {
         this.link = link;
-        this.thumb = thumb;
         this.title = title;
+        this.thumb = thumb;
     }
 
     public String getLink() {
         return link;
     }
 
+
+
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getThumb() {
@@ -27,11 +49,19 @@ public class FavouriteModel {
         this.thumb = thumb;
     }
 
-    public String getTitle() {
-        return title;
+    public String getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }
